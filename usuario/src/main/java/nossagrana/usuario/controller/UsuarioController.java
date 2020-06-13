@@ -3,6 +3,7 @@ package nossagrana.usuario.controller;
 import nossagrana.usuario.dto.LogarUsuarioDTO;
 import nossagrana.usuario.dto.UsuarioDTO;
 import nossagrana.usuario.dto.UsuarioLogadoDTO;
+import nossagrana.usuario.entity.Usuario;
 import nossagrana.usuario.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

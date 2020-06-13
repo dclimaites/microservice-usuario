@@ -23,6 +23,8 @@ public class LogarUsuarioDTO {
     private String email;
     private String senha;
 
+    public LogarUsuarioDTO() {}
+
     public LogarUsuarioDTO(String email, String senha) {
         this.email = email;
         this.senha = senha;

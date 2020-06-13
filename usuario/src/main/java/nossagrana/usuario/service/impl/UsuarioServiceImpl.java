@@ -28,7 +28,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         if(usuarioLogado == null || (usuarioLogado.getSenha() != usuarioLogado.getSenha()))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
-        return new UsuarioLogadoDTO(usuarioLogado);
+        UsuarioLogadoDTO teste = new UsuarioLogadoDTO(usuarioLogado);
+        String nome = teste.getNome();
+
+        return teste;
     }
 
     @Override

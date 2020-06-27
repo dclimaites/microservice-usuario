@@ -23,9 +23,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioLogadoDTO autenticar(LogarUsuarioDTO usuario) {
+
+        if(usuario == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
         Usuario usuarioLogado = usuarioRepository.findByEmail(usuario.getEmail());
 
-        if(usuarioLogado == null || (usuarioLogado.getSenha() != usuarioLogado.getSenha()))
+        if(usuarioLogado == null || (!usuario.getSenha().equals(usuarioLogado.getSenha())))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         UsuarioLogadoDTO teste = new UsuarioLogadoDTO(usuarioLogado);

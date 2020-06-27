@@ -3,6 +3,7 @@ package nossagrana.usuario.dto;
 import nossagrana.usuario.entity.Usuario;
 
 public class UsuarioDTO {
+
     public String getNome() {
         return nome;
     }
@@ -39,6 +40,10 @@ public class UsuarioDTO {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    public UsuarioDTO() {
+    }
+
 
     public UsuarioDTO(String nome, String email, String senha) {
         this.nome = nome;

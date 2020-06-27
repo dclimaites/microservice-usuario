@@ -20,12 +20,7 @@ public class UsuarioController {
 
     @PostMapping("autenticar")
     public UsuarioLogadoDTO Logar(@RequestBody LogarUsuarioDTO usuario) {
-        try {
-            return this.service.autenticar(usuario);
-        }
-        catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return this.service.autenticar(usuario);
     }
 
     @PostMapping
@@ -40,11 +35,6 @@ public class UsuarioController {
 
     @DeleteMapping
     public void excluir(@RequestBody UsuarioDTO usuario) {
-        try {
-            service.deactivate(usuario);
-        }
-        catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        service.deactivate(usuario);
     }
 }

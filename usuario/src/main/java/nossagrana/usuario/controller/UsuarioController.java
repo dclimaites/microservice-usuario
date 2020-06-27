@@ -1,5 +1,8 @@
 package nossagrana.usuario.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import nossagrana.usuario.dto.LogarUsuarioDTO;
 import nossagrana.usuario.dto.UsuarioDTO;
 import nossagrana.usuario.dto.UsuarioLogadoDTO;
@@ -21,6 +24,12 @@ public class UsuarioController {
         this.service = service;
     }
 
+    @ApiOperation(value = "Realiza a autenticação de um usuário.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Autenticação realizada com sucesso."),
+            @ApiResponse(code = 403, message = "Acesso negado para autenticacão.")}
+    )
+    @CrossOrigin
     @PostMapping("autenticar")
     public UsuarioLogadoDTO Logar(@RequestBody LogarUsuarioDTO usuarioDto) {
         try {
@@ -35,6 +44,13 @@ public class UsuarioController {
         }
     }
 
+    @ApiOperation(value = "Realiza o cadastro de um novo usuário")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Usuario criado com sucesso."),
+            @ApiResponse(code = 400, message = "Usuario já existe.")}
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin
     @PostMapping
     public UsuarioLogadoDTO criar(@RequestBody UsuarioDTO usuarioDto) {
         try{
@@ -49,6 +65,13 @@ public class UsuarioController {
         }
     }
 
+
+    @ApiOperation(value = "Atualiza um usuário existente.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Atualização realizada com sucesso."),
+            @ApiResponse(code = 403, message = "Usuário não encontrado.")}
+    )
+    @CrossOrigin
     @PutMapping
     public UsuarioLogadoDTO atualizar(@RequestBody UsuarioDTO usuarioDto) {
         try {
@@ -63,6 +86,12 @@ public class UsuarioController {
         }
     }
 
+    @ApiOperation(value = "Remove um usuário.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Usuário removido com sucesso."),
+            @ApiResponse(code = 403, message = "Usuário não encontrado.")}
+    )
+    @CrossOrigin
     @DeleteMapping
     public void excluir(@RequestBody UsuarioDTO usuarioDto) {
         try {
@@ -75,4 +104,5 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

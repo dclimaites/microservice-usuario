@@ -21,6 +21,8 @@ public class UsuarioLogadoDTO {
     public UsuarioLogadoDTO(Usuario usuario) {
         this.nome = usuario.getNome();
         this.email = usuario.getEmail();
+        this.ativo = usuario.isAtivo();
+        this.dataDesativacao = usuario.getDataDesativacao();
     }
 
     public String getNome() {

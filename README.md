@@ -1,4 +1,5 @@
-# microservice-usuario
-Repositório do do micro serviço de usuário do app A Grana é nossa
+# Microservice-usuario
+Repositório do do micro serviço de usuário do app A Grana é nossa.
 
-http://localhost:8085/swagger-ui.html
+# Documentação Swagger
+A documentação do swagger pode ser acessada no endpoint /swagger-ui.html

@@ -3,6 +3,20 @@ package nossagrana.usuario.dto;
 import nossagrana.usuario.entity.Usuario;
 
 public class LogarUsuarioDTO {
+    private String email;
+    private String senha;
+
+    public LogarUsuarioDTO() {}
+
+    public LogarUsuarioDTO(String email, String senha) {
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public LogarUsuarioDTO(Usuario usuario) {
+        email = usuario.getEmail();
+        senha = usuario.getSenha();
+    }
 
     public String getEmail() {
         return email;
@@ -18,20 +32,5 @@ public class LogarUsuarioDTO {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    private String email;
-    private String senha;
-
-    public LogarUsuarioDTO() {}
-
-    public LogarUsuarioDTO(String email, String senha) {
-        this.email = email;
-        this.senha = senha;
-    }
-
-    public LogarUsuarioDTO(Usuario usuario) {
-        email = usuario.getEmail();
-        senha = usuario.getSenha();
     }
 }

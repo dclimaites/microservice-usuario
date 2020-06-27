@@ -6,7 +6,32 @@ import org.springframework.data.annotation.Id;
 import java.time.ZonedDateTime;
 
 public class Usuario {
+    @Id
+    private String id;
+    private String nome;
+    private String email;
+    private String senha;
+    private boolean isAtivo;
+    private ZonedDateTime dataDesativacao;
 
+    public Usuario() {}
+
+    public Usuario(String nome, String email, String senha, ZonedDateTime dataDesativacao) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.dataDesativacao = dataDesativacao;
+    }
+
+    /**
+     * O Usuário sempre é criado ativo.
+     */
+    public Usuario(UsuarioDTO usuario) {
+        this.nome = usuario.getNome();
+        this.email = usuario.getEmail();
+        this.senha = usuario.getSenha();
+        this.isAtivo =true;
+    }
 
     public String getNome() {
         return nome;
@@ -40,12 +65,6 @@ public class Usuario {
         this.id = id;
     }
 
-    @Id
-    private String id;
-    private String nome;
-    private String email;
-    private String senha;
-
     public ZonedDateTime getDataDesativacao() {
         return dataDesativacao;
     }
@@ -54,32 +73,20 @@ public class Usuario {
         this.dataDesativacao = dataDesativacao;
     }
 
-    private ZonedDateTime dataDesativacao;
-
     public boolean isAtivo() {
-        return ativo;
+        return isAtivo;
     }
 
     public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
+        this.isAtivo = ativo;
     }
 
-    private boolean ativo;
-
-    public Usuario() {
-
+    public boolean isSenhaValida(String senha){
+        return this.senha.equals(senha);
     }
 
-    public Usuario(String nome, String email, String senha, ZonedDateTime dataDesativacao) {
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.dataDesativacao = dataDesativacao;
-    }
-
-    public Usuario(UsuarioDTO usuario) {
-        this.nome = usuario.getNome();
-        this.email = usuario.getEmail();
-        this.senha = usuario.getSenha();
+    public void desativar(){
+        this.isAtivo = false;
+        this.dataDesativacao = ZonedDateTime.now();
     }
 }

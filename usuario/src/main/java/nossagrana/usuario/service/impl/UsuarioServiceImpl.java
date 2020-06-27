@@ -2,80 +2,69 @@ package nossagrana.usuario.service.impl;
 
 import nossagrana.usuario.dto.LogarUsuarioDTO;
 import nossagrana.usuario.dto.UsuarioDTO;
-import nossagrana.usuario.dto.UsuarioLogadoDTO;
 import nossagrana.usuario.entity.Usuario;
+import nossagrana.usuario.entity.UsuarioJaExisteException;
+import nossagrana.usuario.entity.UsuarioNaoAutenticadoException;
+import nossagrana.usuario.entity.UsuarioNaoEncontradoException;
 import nossagrana.usuario.repository.UsuarioRepository;
 import nossagrana.usuario.service.UsuarioService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.time.ZonedDateTime;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+    private UsuarioRepository usuarioRepository;
 
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    private UsuarioRepository usuarioRepository;
-
     @Override
-    public UsuarioLogadoDTO autenticar(LogarUsuarioDTO usuario) {
+    public Usuario autenticar(LogarUsuarioDTO usuarioDto){
+        Usuario usuario = usuarioRepository.findByEmail(usuarioDto.getEmail());
 
-        if(usuario == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if(usuario == null)
+            throw new UsuarioNaoAutenticadoException();
 
-        Usuario usuarioLogado = usuarioRepository.findByEmail(usuario.getEmail());
+        if(!usuario.isSenhaValida(usuarioDto.getSenha()))
+            throw new UsuarioNaoAutenticadoException();
 
-        if(usuarioLogado == null || (!usuario.getSenha().equals(usuarioLogado.getSenha())))
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-
-        UsuarioLogadoDTO teste = new UsuarioLogadoDTO(usuarioLogado);
-        String nome = teste.getNome();
-
-        return teste;
+        return usuario;
     }
 
     @Override
-    public UsuarioLogadoDTO create(UsuarioDTO usuario) {
+    public Usuario criar(UsuarioDTO usuarioDto) {
+        certificaQueUsuarioPodeSerCriado(usuarioDto.getEmail());
 
-        Usuario usuarioJaCadastrado = usuarioRepository.findByEmail(usuario.getEmail());
+        Usuario usuario = new Usuario(usuarioDto);
+        usuarioRepository.save(usuario);
 
-        if(usuarioJaCadastrado != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este e-mail já está vinculado a um cadastro");
+        return usuario;
+    }
 
-        Usuario usuarioCriado = new Usuario(usuario);
-
-        usuario.setAtivo(true);
-
-        usuarioRepository.save(usuarioCriado);
-
-        return new UsuarioLogadoDTO(usuarioCriado);
+    private void certificaQueUsuarioPodeSerCriado(String email){
+        if( usuarioRepository.findByEmail(email) != null){
+            throw new UsuarioJaExisteException("Já existe um usuario vinculado ao e-mail informado.");
+        }
     }
 
     @Override
-    public UsuarioLogadoDTO update(UsuarioDTO usuario) {
-        Usuario original = usuarioRepository.findByEmail(usuario.getEmail());
+    public Usuario atualizar(UsuarioDTO usuarioDto) {
+        Usuario usuario = usuarioRepository.findByEmail(usuarioDto.getEmail());
 
-        if(usuario == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (usuario == null) throw new UsuarioNaoEncontradoException();
 
-        original.setNome(usuario.getNome());
-        original.setSenha(usuario.getSenha());
-
-        usuarioRepository.save(original);
-
-        return new UsuarioLogadoDTO(original);
+        usuario.setNome(usuarioDto.getNome());
+        usuario.setSenha(usuarioDto.getSenha());
+        return usuarioRepository.save(usuario);
     }
 
     @Override
-    public void deactivate(UsuarioDTO usuario) {
-        Usuario original = usuarioRepository.findByEmail(usuario.getEmail());
+    public void remover(UsuarioDTO usuarioDto) {
+        Usuario usuario = usuarioRepository.findByEmail(usuarioDto.getEmail());
 
-        if(usuario == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (usuario == null) throw new UsuarioNaoEncontradoException();
 
-        original.setAtivo(false);
-        original.setDataDesativacao(ZonedDateTime.now());
-
-        usuarioRepository.save(original);
+        usuario.desativar();
+        usuarioRepository.save(usuario);
     }
 }

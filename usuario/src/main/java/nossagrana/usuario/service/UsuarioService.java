@@ -2,14 +2,14 @@ package nossagrana.usuario.service;
 
 import nossagrana.usuario.dto.LogarUsuarioDTO;
 import nossagrana.usuario.dto.UsuarioDTO;
-import nossagrana.usuario.dto.UsuarioLogadoDTO;
+import nossagrana.usuario.entity.Usuario;
 
 public interface UsuarioService {
-    UsuarioLogadoDTO autenticar(LogarUsuarioDTO usuario);
+    Usuario autenticar(LogarUsuarioDTO usuario);
 
-    UsuarioLogadoDTO create(UsuarioDTO usuario);
+    Usuario criar(UsuarioDTO usuario);
 
-    UsuarioLogadoDTO update(UsuarioDTO usuario);
+    Usuario atualizar(UsuarioDTO usuario);
 
-    void deactivate(UsuarioDTO usuario);
+    void remover(UsuarioDTO usuario);
 }

@@ -8,7 +8,7 @@ import nossagrana.usuario.entity.UsuarioNaoAutenticadoException;
 import nossagrana.usuario.entity.UsuarioNaoEncontradoException;
 import nossagrana.usuario.repository.UsuarioRepository;
 import nossagrana.usuario.service.UsuarioService;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -70,14 +70,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.save(usuario);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(ContextRefreshedEvent.class)
     public void criaUsuarioAdminCasoNaoExista(){
         final String emailUserAdmin = "admin@admin.com";
-        Usuario usuarioAdminExistente =  usuarioRepository.findByEmail(emailUserAdmin);
-
-        if (usuarioAdminExistente == null){
-            Usuario usuarioAdmin = new Usuario("admin","admin@admin.com","admin",true,null);
-            usuarioRepository.save(usuarioAdmin);
+        try {
+            Usuario usuarioAdminExistente = usuarioRepository.findByEmail(emailUserAdmin);
+            if (usuarioAdminExistente == null) {
+                Usuario usuarioAdmin = new Usuario("admin", "admin@admin.com", "admin", true, null);
+                usuarioRepository.save(usuarioAdmin);
+            }
+        } catch (Exception e) {
+            /* Abafa */
         }
     }
 }

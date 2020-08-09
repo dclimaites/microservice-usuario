@@ -12,4 +12,6 @@ public interface UsuarioService {
     Usuario atualizar(UsuarioDTO usuario);
 
     void remover(UsuarioDTO usuario);
+
+    Usuario consultaPorEmail(String email);
 }

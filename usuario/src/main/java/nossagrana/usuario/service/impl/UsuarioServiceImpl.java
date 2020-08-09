@@ -62,12 +62,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void remover(UsuarioDTO usuarioDto) {
-        Usuario usuario = usuarioRepository.findByEmail(usuarioDto.getEmail());
-
-        if (usuario == null) throw new UsuarioNaoEncontradoException();
+        Usuario usuario = consultaPorEmail(usuarioDto.getEmail());
 
         usuario.desativar();
         usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public Usuario consultaPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        if (usuario == null) throw new UsuarioNaoEncontradoException();
+        return usuario;
     }
 
     @EventListener(ContextRefreshedEvent.class)

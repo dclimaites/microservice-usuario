@@ -1,7 +1,8 @@
 name: Publish Docker image
 on:
   push:
-    branches: entrega-trabalho-fiap-cloud-development            
+    branches: 
+      - entrega-trabalho-fiap-cloud-development              
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -14,5 +15,4 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: brunovieirafarias/microservico-usuario-git-action
-          tag_with_ref: true
+          repository: brunovieirafarias/microservico-usuario-git-action          

@@ -69,7 +69,7 @@ public class UsuarioController {
     @ApiOperation(value = "Atualiza um usuário existente.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Atualização realizada com sucesso."),
-            @ApiResponse(code = 403, message = "Usuário não encontrado.")}
+            @ApiResponse(code = 400, message = "Usuário não encontrado.")}
     )
     @CrossOrigin
     @PutMapping
@@ -89,7 +89,7 @@ public class UsuarioController {
     @ApiOperation(value = "Remove um usuário.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Usuário removido com sucesso."),
-            @ApiResponse(code = 403, message = "Usuário não encontrado.")}
+            @ApiResponse(code = 400, message = "Usuário não encontrado.")}
     )
     @CrossOrigin
     @DeleteMapping
@@ -105,4 +105,22 @@ public class UsuarioController {
         }
     }
 
+    @ApiOperation(value = "Busca o nome do usuario por email.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Busca realizada com sucesso."),
+            @ApiResponse(code = 400, message = "Usuário não encontrado.")}
+    )
+    @CrossOrigin
+    @GetMapping("{email}")
+    public String buscaNomeUsuario(@PathVariable String email) {
+        try {
+            return service.consultaPorEmail(email).getNome();
+        }
+        catch (UsuarioNaoEncontradoException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
